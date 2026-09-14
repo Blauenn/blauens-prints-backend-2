@@ -10,11 +10,12 @@ export async function parseImage(file: File): Promise<ImportedImageData> {
     imageUrl: "",
     thumbnailUrl: "",
     flash: false,
-    keywords: "",
+    people: [],
+    keywords: [],
   };
 
   try {
-    const exif = await exifr.parse(file);
+    const exif = await exifr.parse(file, { xmp: true });
 
     const focalLength = exif?.LensSpecification?.[0];
     const focalLengthMax = exif?.LensSpecification?.[1];
@@ -32,6 +33,11 @@ export async function parseImage(file: File): Promise<ImportedImageData> {
 
     const flash = exif?.Flash !== undefined ? Boolean(exif.Flash & 1) : false;
 
+    // Split "and" or "," into an array
+    let people = exif.ImageDescription.split(/\s+and\s+|,/)
+      .map((person: string) => person.trim())
+      .filter(Boolean);
+
     image.fileName = originalFileName;
     image.width = width;
     image.height = height;
@@ -46,7 +52,8 @@ export async function parseImage(file: File): Promise<ImportedImageData> {
     image.shotFocalLength = exif?.FocalLength;
     image.flash = flash;
     image.dateTimeOriginal = exif?.DateTimeOriginal;
-    image.keywords = exif?.Keywords ?? "";
+    image.people = people;
+    image.keywords = exif?.subject ?? [];
   } catch (error) {
     console.error(`Failed to parse image: ${file.name}`, error);
   }

@@ -63,12 +63,11 @@ function RouteComponent() {
               value={selectedIndex}
               onChange={(event) => setSelectedIndex(Number(event.target.value))}
             >
-              {images.length > 0 &&
-                images.map((image, index) => (
-                  <option key={index} value={index}>
-                    {image.fileName}
-                  </option>
-                ))}
+              {images.map((image, index) => (
+                <option key={index} value={index}>
+                  {image.fileName}
+                </option>
+              ))}
             </Select>
           </section>
           <section>
@@ -142,8 +141,21 @@ function RouteComponent() {
                       />
                     ))}
                   </datalist>
-                  <Label htmlFor="recipients">Recipients</Label>
-                  <Input id="recipients" list="people-list" />
+                  {Array.from({
+                    length: Math.max(1, selectedImage.people.length),
+                  }).map((_, index) => (
+                    <div key={index}>
+                      <Label htmlFor={`recipient-${index}`}>
+                        Recipient {index + 1}
+                      </Label>
+
+                      <Input
+                        id={`recipient-${index}`}
+                        list="people-list"
+                        value={selectedImage.people[index] ?? ""}
+                      />
+                    </div>
+                  ))}
                   <div className="border border-black p-4"></div>
                 </div>
 
@@ -166,7 +178,10 @@ function RouteComponent() {
 
                 <div className="bg-pink-100">
                   <Label htmlFor="keywords">Keywords</Label>
-                  <TextArea id="keywords" />
+                  <TextArea
+                    id="keywords"
+                    defaultValue={selectedImage.keywords.join("; ")}
+                  />
                 </div>
               </div>
             </div>
