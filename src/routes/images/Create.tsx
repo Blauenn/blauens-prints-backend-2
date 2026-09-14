@@ -1,9 +1,10 @@
 import Button from "#/components/buttons/Button";
-import Input from "#/components/inputs/Input";
 import Label from "#/components/inputs/Label";
 import Select from "#/components/inputs/Select";
 import TextArea from "#/components/inputs/TextArea";
 import FileDropzone from "#/components/routeBased/images/Create/FileDropzone";
+import FileSelector from "#/components/routeBased/images/Create/FileSelector";
+import FileStaticInformation from "#/components/routeBased/images/Create/FileStaticInformation";
 import { printPaper, printSizes } from "#/constants/prints";
 import { parseImage } from "#/functions/exif";
 import type { ImportedImageData } from "#/types/Image";
@@ -28,9 +29,10 @@ function RouteComponent() {
     { id: 2, facebook: "Hirai Masako", facebook_handle: "", instagram: "" },
   ];
 
+  const [search, setSearch] = useState("");
+
   const [images, setImages] = useState<ImportedImageData[]>([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
-
   const selectedImage = images[selectedIndex];
 
   async function handleFilesSelect(files: File[]) {
@@ -57,62 +59,13 @@ function RouteComponent() {
 
       {images.length > 0 ? (
         <div>
-          <section>
-            <h1>File selector</h1>
-            <Select
-              value={selectedIndex}
-              onChange={(event) => setSelectedIndex(Number(event.target.value))}
-            >
-              {images.map((image, index) => (
-                <option key={index} value={index}>
-                  {image.fileName}
-                </option>
-              ))}
-            </Select>
-          </section>
-          <section>
-            <div className="bg-blue-100 mb-4">
-              <h1>File static information</h1>
+          <FileSelector
+            selectedIndex={selectedIndex}
+            setSelectedIndex={setSelectedIndex}
+            images={images}
+          />
 
-              <img
-                src={URL.createObjectURL(selectedImage.file)}
-                className="w-[256px]"
-              />
-
-              <div className="">
-                <h1>{selectedImage.fileName}</h1>
-                <h1>
-                  {selectedImage.cameraName} {selectedImage.cameraModel} +{" "}
-                  {selectedImage.lensModel}
-                </h1>
-              </div>
-
-              <div>
-                <div className="flex flex-row justify-between">
-                  <h1>Resolution</h1>
-                  <h1>
-                    {selectedImage.width}x{selectedImage.height}
-                  </h1>
-                </div>
-                <div className="flex flex-row justify-between">
-                  <h1>ISO</h1>
-                  <h1>{selectedImage.iso}</h1>
-                </div>
-                <div className="flex flex-row justify-between">
-                  <h1>Aperture</h1>
-                  <h1>f/{selectedImage.aperture}</h1>
-                </div>
-                <div className="flex flex-row justify-between">
-                  <h1>Shutter</h1>
-                  <h1>{selectedImage.exposureTime}</h1>
-                </div>
-                <div className="flex flex-row justify-between">
-                  <h1>Focal length</h1>
-                  <h1>{selectedImage.shotFocalLength}mm</h1>
-                </div>
-              </div>
-            </div>
-          </section>
+          <FileStaticInformation selectedImage={selectedImage} />
 
           <section>
             <div className="bg-blue-100 mb-4">
@@ -128,35 +81,6 @@ function RouteComponent() {
                       </option>
                     ))}
                   </Select>
-                </div>
-
-                <div className="bg-pink-100">
-                  <datalist id="people-list">
-                    {people.map((person) => (
-                      <option
-                        key={person.id}
-                        value={
-                          person.facebook ? person.facebook : person.instagram
-                        }
-                      />
-                    ))}
-                  </datalist>
-                  {Array.from({
-                    length: Math.max(1, selectedImage.people.length),
-                  }).map((_, index) => (
-                    <div key={index}>
-                      <Label htmlFor={`recipient-${index}`}>
-                        Recipient {index + 1}
-                      </Label>
-
-                      <Input
-                        id={`recipient-${index}`}
-                        list="people-list"
-                        value={selectedImage.people[index] ?? ""}
-                      />
-                    </div>
-                  ))}
-                  <div className="border border-black p-4"></div>
                 </div>
 
                 <div className="bg-pink-100">

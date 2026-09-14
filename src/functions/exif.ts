@@ -20,8 +20,6 @@ export async function parseImage(file: File): Promise<ImportedImageData> {
     const focalLength = exif?.LensSpecification?.[0];
     const focalLengthMax = exif?.LensSpecification?.[1];
 
-    const originalFileName = file.name.split("-")[1];
-
     const dimensions = file.name
       .split("-")
       .at(-1)
@@ -38,7 +36,7 @@ export async function parseImage(file: File): Promise<ImportedImageData> {
       .map((person: string) => person.trim())
       .filter(Boolean);
 
-    image.fileName = originalFileName;
+    image.fileName = exif?.PreservedFileName;
     image.width = width;
     image.height = height;
     image.cameraName = exif?.Make;

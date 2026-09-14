@@ -1,0 +1,72 @@
+import type { ImportedImageData } from "#/types/Image";
+
+type Props = {
+  selectedImage: ImportedImageData;
+};
+
+type InformationLineProps = {
+  label: string;
+  value: string;
+};
+
+function FileStaticInformationLine({ label, value }: InformationLineProps) {
+  return (
+    <div className="flex flex-row justify-between">
+      <h1>{label}</h1>
+      <h1>{value}</h1>
+    </div>
+  );
+}
+
+export default function FileStaticInformation({ selectedImage }: Props) {
+  const displayValues = [
+    {
+      label: "Digitized",
+      value: new Date(String(selectedImage.dateTimeOriginal)).toLocaleString(),
+    },
+    {
+      label: "Resolution",
+      value: `${selectedImage.width}x${selectedImage.height}`,
+    },
+    {
+      label: "ISO",
+      value: String(selectedImage.iso),
+    },
+    {
+      label: "Aperture",
+      value: `f/${selectedImage.aperture}`,
+    },
+    {
+      label: "Shutter",
+      value: String(selectedImage.exposureTime),
+    },
+    {
+      label: "Focal length",
+      value: `${selectedImage.shotFocalLength}mm`,
+    },
+  ];
+  return (
+    <section>
+      <div className="border border-gray-200 p-4 rounded-xl mb-4">
+        <img
+          src={URL.createObjectURL(selectedImage.file)}
+          className="rounded-xl shadow-md mb-8"
+        />
+
+        <div className="mb-4">
+          <h1 className="text-2xl font-bold">{selectedImage.fileName}</h1>
+          <p className="text-md opacity-50">
+            {selectedImage.cameraName} {selectedImage.cameraModel} +{" "}
+            {selectedImage.lensModel}
+          </p>
+        </div>
+
+        <div className="flex flex-col gap-2">
+	{displayValues.map(index, item) => (
+	    <FileStaticInformationLine key={index} label={item.label} value={item.value} />
+	)}
+        </div>
+      </div>
+    </section>
+  );
+}
