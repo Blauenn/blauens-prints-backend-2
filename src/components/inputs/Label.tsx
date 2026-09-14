@@ -1,13 +1,5 @@
-type Props = {
-  htmlFor: string;
-  label: string;
-  className?: string;
-};
+type Props = React.LabelHTMLAttributes<HTMLLabelElement>;
 
-export default function Label({ htmlFor, label, className }: Props) {
-  return (
-    <label htmlFor={htmlFor} className={`${className}`}>
-      {label}
-    </label>
-  );
+export default function Label({ className, ...props }: Props) {
+  return <label {...props} className={`${className ?? ""}`} />;
 }

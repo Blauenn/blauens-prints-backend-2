@@ -1,0 +1,22 @@
+export type ImportedImageData = {
+  file: File;
+  category: number;
+  fileName: string;
+  number: number;
+  imageUrl: string;
+  thumbnailUrl: string;
+  width?: number;
+  height?: number;
+  cameraName?: string;
+  cameraModel?: string;
+  lensModel?: string;
+  focalLength?: number;
+  focalLengthMax?: number;
+  iso?: number;
+  exposureTime?: number;
+  aperture?: number;
+  shotFocalLength?: number;
+  flash: boolean;
+  dateTimeOriginal?: Date;
+  keywords: string;
+};

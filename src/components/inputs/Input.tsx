@@ -1,16 +1,10 @@
-type Props = {
-  id: string;
-  list?: string;
-  className?: string;
-};
+type Props = React.InputHTMLAttributes<HTMLInputElement>;
 
-export default function Input({ id, list, className }: Props) {
+export default function Input({ className, ...props }: Props) {
   return (
     <input
-      id={id}
-      name={id}
-      list={list}
-      className={`border border-black bg-white ${className}`}
+      {...props}
+      className={`border border-black bg-white ${className ?? ""}`}
     />
   );
 }

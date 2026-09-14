@@ -1,12 +1,11 @@
-type Props = {
+type Props = React.SelectHTMLAttributes<HTMLSelectElement> & {
   children: React.ReactNode;
-  id: string;
-  className?: string;
 };
 
-export default function Select({ children, id, className }: Props) {
+export default function Select({ children, id, className, ...props }: Props) {
   return (
     <select
+      {...props}
       id={id}
       name={id}
       className={`border border-black bg-white ${className}`}
