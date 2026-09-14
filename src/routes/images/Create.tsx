@@ -6,7 +6,6 @@ import FileDropzone from "#/components/routeBased/images/Create/FileDropzone";
 import FileSelector from "#/components/routeBased/images/Create/FileSelector";
 import FileStaticInformation from "#/components/routeBased/images/Create/FileStaticInformation";
 import { printPaper, printSizes } from "#/constants/prints";
-import { parseImage } from "#/functions/exif";
 import type { ImportedImageData } from "#/types/Image";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
@@ -35,39 +34,24 @@ function RouteComponent() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const selectedImage = images[selectedIndex];
 
-  async function handleFilesSelect(files: File[]) {
-    const parsedImages = await Promise.all(
-      files.map((file) => parseImage(file)),
-    );
-
-    setImages(parsedImages);
-    setSelectedIndex(0);
-  }
-
   return (
     <div className="p-8">
       <Link to="/" className="text-2xl font-bold">
         Return
       </Link>
 
-      <section>
-        <div className="bg-blue-100 mb-4">
-          <h1>File dropzone</h1>
-          <FileDropzone onFilesSelect={handleFilesSelect} />
-        </div>
-      </section>
+      <div className="mt-8">
+        <FileSelector
+          images={images}
+          setImages={setImages}
+          selectedIndex={selectedIndex}
+          setSelectedIndex={setSelectedIndex}
+        />
 
-      {images.length > 0 ? (
-        <div>
-          <FileSelector
-            selectedIndex={selectedIndex}
-            setSelectedIndex={setSelectedIndex}
-            images={images}
-          />
-
-          <FileStaticInformation selectedImage={selectedImage} />
-
+        {images.length > 0 ? (
           <section>
+            <FileStaticInformation selectedImage={selectedImage} />
+
             <div className="bg-blue-100 mb-4">
               <h1>Information fields</h1>
 
@@ -109,12 +93,12 @@ function RouteComponent() {
                 </div>
               </div>
             </div>
+            <Button className="bg-pink-200">Submit</Button>
           </section>
-          <Button className="bg-pink-200">Submit</Button>
-        </div>
-      ) : (
-        <div>Nothing at all</div>
-      )}
+        ) : (
+          ""
+        )}
+      </div>
     </div>
   );
 }
