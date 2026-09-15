@@ -88,7 +88,7 @@ export default function FileSelector({
           onClick={() => inputRef.current?.click()}
           onDragOver={(event) => event.preventDefault()}
           onDrop={handleDrop}
-          className={`w-full h-[128px] md:h-[256px] max-h-[256px] overflow-y-auto grid md:max-h-[320px]  ${images.length <= 7 ? "grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6" : "grid-cols-3 sm:grid-cols-5 md:grid-cols-7 lg:grid-cols-9"}  gap-2 ${images.length <= 0 ? "border border-gray-200 rounded-xl" : ""}`}
+          className={`w-full h-[256px] md:h-[256px] max-h-[256px] overflow-y-auto grid md:max-h-[320px]  ${images.length <= 7 ? "grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6" : "grid-cols-3 sm:grid-cols-5 md:grid-cols-7 lg:grid-cols-9"}  gap-2 ${images.length <= 0 ? "border border-gray-200 rounded-xl" : ""}`}
         >
           <input
             ref={inputRef}
@@ -106,7 +106,7 @@ export default function FileSelector({
                   setSelectedIndex(index);
                 }}
                 key={index}
-                className={`${selectedIndex == index ? "bg-pink-200 shadow-sm" : "bg-white"} h-auto flex flex-col items-center justify-between py-2 px-2 border border-gray-200 rounded-xl`}
+                className={`${selectedIndex == index ? "bg-pink-200 shadow-sm" : "hover:bg-pink-100 bg-white"} h-auto flex flex-col items-center justify-between py-2 px-2 border border-gray-200 rounded-xl`}
               >
                 <div className="h-full flex items-center justify-center mb-2">
                   <img
@@ -114,13 +114,13 @@ export default function FileSelector({
                     className="rounded-md shadow-sm"
                   />
                 </div>
-                <h1 className="w-full text-xs md:text-16px] truncate text-center">
+                <h1 className="w-full text-xs font-semibold md:font-normal md:text-[12px] truncate text-center">
                   {image.fileName}
                 </h1>
               </div>
             ))
           ) : (
-            <div className="col-span-full flex flex-col gap-4 items-center justify-center">
+            <div className="col-span-full h-auto flex flex-col gap-4 items-center justify-center">
               <ImagesIcon size={64} className="opacity-50" />
               <h1 className="text-xl italic opacity-50">
                 Drag and drop images here...

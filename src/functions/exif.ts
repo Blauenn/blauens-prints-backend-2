@@ -50,6 +50,7 @@ export async function parseImage(file: File): Promise<ImportedImageData> {
     image.shotFocalLength = exif?.FocalLength;
     image.flash = flash;
     image.dateTimeOriginal = exif?.DateTimeOriginal;
+    image.newDate = exif?.DateTimeOriginal;
     image.people = people;
     image.keywords = exif?.subject ?? [];
   } catch (error) {

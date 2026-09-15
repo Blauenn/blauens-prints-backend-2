@@ -53,7 +53,11 @@ function RouteComponent() {
 
         {images.length > 0 ? (
           <section>
-            <FileStaticInformation selectedImage={selectedImage} />
+            <FileStaticInformation
+              setImages={setImages}
+              selectedImage={selectedImage}
+              selectedIndex={selectedIndex}
+            />
 
             <div className="bg-blue-100 mb-4">
               <h1>Information fields</h1>

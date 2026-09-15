@@ -2,7 +2,8 @@ import { formatShutterSpeed } from "#/functions/numbers";
 import type { ImportedImageData } from "#/types/Image";
 import {
   ApertureIcon,
-  ClockClockwiseIcon,
+  CaretDownIcon,
+  CaretUpIcon,
   ClockCounterClockwiseIcon,
   ClockIcon,
   FrameCornersIcon,
@@ -11,40 +12,26 @@ import {
   LightningSlashIcon,
   MountainsIcon,
   TimerIcon,
-  type Icon,
 } from "@phosphor-icons/react";
-import { useEffect, useState } from "react";
+import FileStaticInformationLine from "./FileStaticInformationLine";
 
 type Props = {
   selectedImage: ImportedImageData;
+  setImages: React.Dispatch<React.SetStateAction<ImportedImageData[]>>;
+  selectedIndex: number;
 };
 
-type InformationLineProps = {
-  label: string;
-  value: string;
-  icon: Icon;
-  className?: string;
-};
-
-function FileStaticInformationLine({
-  label,
-  value,
-  icon: Icon,
-  className,
-}: InformationLineProps) {
-  return (
-    <div className={`flex flex-row justify-between ${className}`}>
-      <div className="flex flex-row items-center gap-2 opacity-50">
-        <Icon size={22} weight="duotone" />
-        <h1 className="">{label}:</h1>
-      </div>
-      <h1>{value}</h1>
-    </div>
-  );
-}
-
-export default function FileStaticInformation({ selectedImage }: Props) {
+export default function FileStaticInformation({
+  selectedImage,
+  setImages,
+  selectedIndex,
+}: Props) {
   const staticDisplayValues = [
+    {
+      icon: FrameCornersIcon,
+      label: "Resolution",
+      value: `${selectedImage.width}x${selectedImage.height}`,
+    },
     {
       icon: MountainsIcon,
       label: "Focal length",
@@ -70,34 +57,36 @@ export default function FileStaticInformation({ selectedImage }: Props) {
       label: "Flash",
       value: selectedImage.flash ? "Fired" : "Did not fire",
     },
-    {
-      icon: FrameCornersIcon,
-      label: "Resolution",
-      value: `${selectedImage.width}x${selectedImage.height}`,
-    },
   ];
 
-  const [displayDateTime, setDisplayDateTime] = useState<Date | null>(null);
-  useEffect(() => {
-    setDisplayDateTime(selectedImage?.dateTimeOriginal ?? null);
-  }, [selectedImage]);
+  const dateDifference =
+    (selectedImage.newDate - selectedImage.dateTimeOriginal) / 3600000;
 
-  const [dateShift, setDateShift] = useState(0);
   function adjustDateTime(hours: number) {
-    setDateShift((current) => current + hours);
+    setImages((current) =>
+      current.map((image, index) => {
+        if (index !== selectedIndex) return image;
 
-    setDisplayDateTime((current) => {
-      if (!current) return null;
+        if (hours === 0) {
+          return {
+            ...image,
+            newDate: image.dateTimeOriginal,
+          };
+        }
 
-      const adjusted = new Date(current);
-      adjusted.setHours(adjusted.getHours() + hours);
+        const newDate = new Date(image.newDate);
+        newDate.setHours(newDate.getHours() + hours);
 
-      return adjusted;
-    });
+        return {
+          ...image,
+          newDate,
+        };
+      }),
+    );
   }
 
   let horizontalImage = false;
-  if (selectedImage.width > selectedImage.height) {
+  if (selectedImage?.width > selectedImage?.height) {
     horizontalImage = true;
   }
 
@@ -121,68 +110,57 @@ export default function FileStaticInformation({ selectedImage }: Props) {
           </div>
 
           <div className="flex flex-col gap-2 mb-2">
+            <FileStaticInformationLine icon={ClockIcon} label="Digitized date">
+              <div className="flex flex-row items-center gap-2">
+                {dateDifference !== 0 ? (
+                  dateDifference > 0 ? (
+                    <h1 className={`font-semibold text-green-400`}>
+                      (+{dateDifference}hr)
+                    </h1>
+                  ) : (
+                    <h1 className={`font-semibold text-red-400`}>
+                      ({dateDifference}hr)
+                    </h1>
+                  )
+                ) : (
+                  ""
+                )}
+                <h1 className="text-right">
+                  {selectedImage.newDate?.toLocaleString()}
+                </h1>
+                <div className="flex flex-col items-center">
+                  <CaretUpIcon
+                    size={18}
+                    weight="duotone"
+                    className="hover:text-green-400 translate-y-1"
+                    onClick={() => adjustDateTime(12)}
+                  />
+                  <ClockCounterClockwiseIcon
+                    size={18}
+                    weight="duotone"
+                    className="hover:text-blue-400 "
+                    onClick={() => {
+                      adjustDateTime(0);
+                    }}
+                  />
+                  <CaretDownIcon
+                    size={18}
+                    weight="duotone"
+                    className="hover:text-red-400 -translate-y-1"
+                    onClick={() => adjustDateTime(-12)}
+                  />
+                </div>
+              </div>
+            </FileStaticInformationLine>
             {staticDisplayValues.map((item) => (
               <FileStaticInformationLine
                 icon={item.icon}
                 key={item.label}
                 label={item.label}
-                value={item.value}
-              />
+              >
+                <h1>{item.value}</h1>
+              </FileStaticInformationLine>
             ))}
-          </div>
-
-          <div className="border border-gray-200 p-4 md:flex md:flex-row md:justify-between rounded-xl">
-            <div className={`flex flex-col gap-2`}>
-              <div className="flex flex-row items-center gap-2 opacity-50">
-                <ClockIcon size={20} weight="duotone" />
-                <h1>Datetime digitized:</h1>
-              </div>
-              <h1 className="text-2xl font-bold">
-                {displayDateTime?.toLocaleDateString()}
-              </h1>
-              <h1 className="text-2xl mb-4">
-                {displayDateTime?.toLocaleTimeString()}{" "}
-                {dateShift != 0 ? (
-                  dateShift > 0 ? (
-                    <span className="font-semibold text-green-400">
-                      (+{dateShift}h)
-                    </span>
-                  ) : (
-                    <span className="font-semibold text-red-400">
-                      ({dateShift}h)
-                    </span>
-                  )
-                ) : (
-                  ""
-                )}
-              </h1>
-            </div>
-            <div className="md:w-[40%] grid grid-cols-3 md:grid-cols-1 gap-2">
-              <button
-                onClick={() => adjustDateTime(-12)}
-                className="w-full flex flex-row items-center justify-center gap-2 shadow-md bg-red-300 py-2 px-4 rounded-xl"
-              >
-                <ClockCounterClockwiseIcon size={26} weight="duotone" />
-                (12h)
-              </button>
-              <button
-                onClick={() => {
-                  setDisplayDateTime(selectedImage.dateTimeOriginal ?? null);
-                  setDateShift(0);
-                }}
-                className="w-full shadow-md bg-gray-200
-	  py-2 px-4 rounded-xl"
-              >
-                Reset
-              </button>
-              <button
-                onClick={() => adjustDateTime(12)}
-                className="w-full flex flex-row items-center justify-center gap-2 shadow-md bg-green-300 py-2 px-4 rounded-xl"
-              >
-                <ClockClockwiseIcon size={26} weight="duotone" />
-                (12h)
-              </button>
-            </div>
           </div>
         </div>
       </div>

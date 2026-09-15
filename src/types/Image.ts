@@ -18,6 +18,7 @@ export type ImportedImageData = {
   shotFocalLength?: number;
   flash: boolean;
   dateTimeOriginal?: Date;
+  newDate?: Date;
   people: string[];
   keywords: string[];
 };
