@@ -2,12 +2,12 @@ import Button from "#/components/buttons/Button";
 import Label from "#/components/inputs/Label";
 import Select from "#/components/inputs/Select";
 import TextArea from "#/components/inputs/TextArea";
-import FileDropzone from "#/components/routeBased/images/Create/FileDropzone";
 import FileSelector from "#/components/routeBased/images/Create/FileSelector";
 import FileStaticInformation from "#/components/routeBased/images/Create/FileStaticInformation";
 import { printPaper, printSizes } from "#/constants/prints";
 import type { ImportedImageData } from "#/types/Image";
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { CaretLeftIcon } from "@phosphor-icons/react";
 import { useState } from "react";
 
 export const Route = createFileRoute("/images/Create")({
@@ -37,7 +37,10 @@ function RouteComponent() {
   return (
     <div className="p-8">
       <Link to="/" className="text-2xl font-bold">
-        Return
+        <div className="flex flex-row items-center gap-2">
+          <CaretLeftIcon size={32} weight="bold" />
+          <h1 className="text-2xl font-bold">Return</h1>
+        </div>
       </Link>
 
       <div className="mt-8">

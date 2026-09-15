@@ -1,6 +1,7 @@
 import { parseImage } from "#/functions/exif";
 import { removeSelectedImage } from "#/functions/images";
 import type { ImportedImageData } from "#/types/Image";
+import { ImagesIcon, TrashIcon } from "@phosphor-icons/react";
 import { useRef } from "react";
 
 type Props = {
@@ -36,7 +37,7 @@ export default function FileSelector({
       return [...current, ...newImages];
     });
 
-    setSelectedIndex(0);
+    setSelectedIndex(selectedIndex);
   }
 
   function handleFiles(files: FileList | null) {
@@ -59,7 +60,10 @@ export default function FileSelector({
     <section>
       <div className="bg-white border border-gray-200 p-4 rounded-xl shadow-sm mb-4">
         <div className="flex items-center justify-between mb-4">
-          <h1 className="text-2xl font-bold">Files selector</h1>
+          <div className="flex flex-row items-center gap-2">
+            <ImagesIcon size={28} weight="duotone" />
+            <h1 className="text-2xl font-bold">Files selector</h1>
+          </div>
           <div className="flex flex-row gap-4 items-center">
             {images.length > 0 ? (
               <button
@@ -73,7 +77,7 @@ export default function FileSelector({
                 }
                 className="cursor-pointer bg-red-200 rounded-xl py-2 px-4"
               >
-                Remove
+                <TrashIcon size={20} weight="duotone" />
               </button>
             ) : (
               ""
@@ -84,7 +88,7 @@ export default function FileSelector({
           onClick={() => inputRef.current?.click()}
           onDragOver={(event) => event.preventDefault()}
           onDrop={handleDrop}
-          className={`w-full h-[256px] max-h-[256px] overflow-y-auto grid md:max-h-[320px]  ${images.length <= 7 ? "grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6" : "grid-cols-3 sm:grid-cols-5 md:grid-cols-7 lg:grid-cols-9"}  gap-2 ${images.length <= 0 ? "border border-gray-200 rounded-xl" : ""}`}
+          className={`w-full h-[128px] md:h-[256px] max-h-[256px] overflow-y-auto grid md:max-h-[320px]  ${images.length <= 7 ? "grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6" : "grid-cols-3 sm:grid-cols-5 md:grid-cols-7 lg:grid-cols-9"}  gap-2 ${images.length <= 0 ? "border border-gray-200 rounded-xl" : ""}`}
         >
           <input
             ref={inputRef}
@@ -116,9 +120,10 @@ export default function FileSelector({
               </div>
             ))
           ) : (
-            <div className="col-span-full flex items-center justify-center">
-              <h1 className="text-2xl italic opacity-50">
-                Drag and drop files here...
+            <div className="col-span-full flex flex-col gap-4 items-center justify-center">
+              <ImagesIcon size={64} className="opacity-50" />
+              <h1 className="text-xl italic opacity-50">
+                Drag and drop images here...
               </h1>
             </div>
           )}

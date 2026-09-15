@@ -1,5 +1,18 @@
 import { formatShutterSpeed } from "#/functions/numbers";
 import type { ImportedImageData } from "#/types/Image";
+import {
+  ApertureIcon,
+  ClockClockwiseIcon,
+  ClockCounterClockwiseIcon,
+  ClockIcon,
+  FrameCornersIcon,
+  LightbulbIcon,
+  LightningIcon,
+  LightningSlashIcon,
+  MountainsIcon,
+  TimerIcon,
+  type Icon,
+} from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 
 type Props = {
@@ -9,17 +22,22 @@ type Props = {
 type InformationLineProps = {
   label: string;
   value: string;
+  icon: Icon;
   className?: string;
 };
 
 function FileStaticInformationLine({
   label,
   value,
+  icon: Icon,
   className,
 }: InformationLineProps) {
   return (
     <div className={`flex flex-row justify-between ${className}`}>
-      <h1 className="opacity-50">{label}:</h1>
+      <div className="flex flex-row items-center gap-2 opacity-50">
+        <Icon size={22} weight="duotone" />
+        <h1 className="">{label}:</h1>
+      </div>
       <h1>{value}</h1>
     </div>
   );
@@ -28,22 +46,32 @@ function FileStaticInformationLine({
 export default function FileStaticInformation({ selectedImage }: Props) {
   const staticDisplayValues = [
     {
+      icon: MountainsIcon,
       label: "Focal length",
       value: `${selectedImage.shotFocalLength}mm`,
     },
     {
+      icon: LightbulbIcon,
       label: "ISO",
       value: String(selectedImage.iso),
     },
     {
+      icon: ApertureIcon,
       label: "Aperture",
       value: `f/${selectedImage.aperture}`,
     },
     {
+      icon: TimerIcon,
       label: "Shutter",
       value: formatShutterSpeed(Number(selectedImage.exposureTime)) + "s",
     },
     {
+      icon: selectedImage.flash ? LightningIcon : LightningSlashIcon,
+      label: "Flash",
+      value: selectedImage.flash ? "Fired" : "Did not fire",
+    },
+    {
+      icon: FrameCornersIcon,
       label: "Resolution",
       value: `${selectedImage.width}x${selectedImage.height}`,
     },
@@ -95,6 +123,7 @@ export default function FileStaticInformation({ selectedImage }: Props) {
           <div className="flex flex-col gap-2 mb-2">
             {staticDisplayValues.map((item) => (
               <FileStaticInformationLine
+                icon={item.icon}
                 key={item.label}
                 label={item.label}
                 value={item.value}
@@ -104,7 +133,10 @@ export default function FileStaticInformation({ selectedImage }: Props) {
 
           <div className="border border-gray-200 p-4 md:flex md:flex-row md:justify-between rounded-xl">
             <div className={`flex flex-col gap-2`}>
-              <h1 className="opacity-50">Datetime digitized:</h1>
+              <div className="flex flex-row items-center gap-2 opacity-50">
+                <ClockIcon size={20} weight="duotone" />
+                <h1>Datetime digitized:</h1>
+              </div>
               <h1 className="text-2xl font-bold">
                 {displayDateTime?.toLocaleDateString()}
               </h1>
@@ -128,9 +160,10 @@ export default function FileStaticInformation({ selectedImage }: Props) {
             <div className="md:w-[40%] grid grid-cols-3 md:grid-cols-1 gap-2">
               <button
                 onClick={() => adjustDateTime(-12)}
-                className="w-full shadow-md bg-red-300 py-2 px-4 rounded-xl"
+                className="w-full flex flex-row items-center justify-center gap-2 shadow-md bg-red-300 py-2 px-4 rounded-xl"
               >
-                -12h
+                <ClockCounterClockwiseIcon size={26} weight="duotone" />
+                (12h)
               </button>
               <button
                 onClick={() => {
@@ -144,9 +177,10 @@ export default function FileStaticInformation({ selectedImage }: Props) {
               </button>
               <button
                 onClick={() => adjustDateTime(12)}
-                className="w-full shadow-md bg-green-300 py-2 px-4 rounded-xl"
+                className="w-full flex flex-row items-center justify-center gap-2 shadow-md bg-green-300 py-2 px-4 rounded-xl"
               >
-                +12h
+                <ClockClockwiseIcon size={26} weight="duotone" />
+                (12h)
               </button>
             </div>
           </div>

@@ -29,7 +29,7 @@ export async function parseImage(file: File): Promise<ImportedImageData> {
     const width = Number(dimensions?.split("x")[0]);
     const height = Number(dimensions?.split("x")[1]);
 
-    const flash = exif?.Flash !== undefined ? Boolean(exif.Flash & 1) : false;
+    const flash = exif?.Flash?.startsWith("Flash fired") ?? false;
 
     // Split "and" or "," into an array
     let people = exif.ImageDescription.split(/\s+and\s+|,/)
