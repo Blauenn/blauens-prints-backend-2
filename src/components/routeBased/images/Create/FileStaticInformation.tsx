@@ -92,7 +92,7 @@ export default function FileStaticInformation({
 
   return (
     <section>
-      <div className="flex flex-col md:flex-row gap-8 items-start shadow-sm bg-white border border-gray-200 p-4 rounded-xl mb-4">
+      <div className="section-box flex flex-col md:flex-row gap-8 items-start mb-4">
         <img
           src={URL.createObjectURL(selectedImage.file)}
           className={`w-full ${horizontalImage ? "md:w-[352px]" : "md:w-[256px]"} rounded-xl shadow-md`}
@@ -104,7 +104,7 @@ export default function FileStaticInformation({
               {selectedImage.fileName}
             </h1>
             <p className="text-md opacity-50">
-              {selectedImage.cameraName} {selectedImage.cameraModel}
+              {selectedImage.cameraName} · {selectedImage.cameraModel}
             </p>
             <p className="text-md opacity-50">{selectedImage.lensModel}</p>
           </div>

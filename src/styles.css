@@ -13,3 +13,12 @@ body,
 body {
 	margin: 0;
 }
+
+
+@utility section-box {
+	@apply shadow-sm bg-white border border-gray-200 p-4 rounded-xl
+}
+
+@utility button {
+	@apply cursor-pointer py-2 px-4 rounded-xl transition-all duration-100
+}

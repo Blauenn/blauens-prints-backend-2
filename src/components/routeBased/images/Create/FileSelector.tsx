@@ -1,8 +1,13 @@
 import { parseImage } from "#/functions/exif";
-import { removeSelectedImage } from "#/functions/images";
+import { navigateImage, removeSelectedImage } from "#/functions/images";
 import type { ImportedImageData } from "#/types/Image";
-import { ImagesIcon, TrashIcon } from "@phosphor-icons/react";
-import { useRef } from "react";
+import {
+  CaretCircleLeftIcon,
+  CaretCircleRightIcon,
+  ImagesIcon,
+  TrashIcon,
+} from "@phosphor-icons/react";
+import { useEffect, useRef } from "react";
 
 type Props = {
   images: ImportedImageData[];
@@ -56,17 +61,73 @@ export default function FileSelector({
     handleFiles(event.dataTransfer.files);
   }
 
+  useEffect(() => {
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "ArrowLeft") {
+        navigateImage({
+          setSelectedIndex,
+          direction: -1,
+          imagesLength: images.length,
+        });
+      }
+
+      if (event.key === "ArrowRight") {
+        navigateImage({
+          setSelectedIndex,
+          direction: 1,
+          imagesLength: images.length,
+        });
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [images.length, setSelectedIndex]);
+
   return (
     <section>
-      <div className="bg-white border border-gray-200 p-4 rounded-xl shadow-sm mb-4">
+      <div className="section-box mb-4">
         <div className="flex items-center justify-between mb-4">
           <div className="flex flex-row items-center gap-2">
             <ImagesIcon size={28} weight="duotone" />
             <h1 className="text-2xl font-bold">Files selector</h1>
           </div>
-          <div className="flex flex-row gap-4 items-center">
-            {images.length > 0 ? (
-              <button
+
+          {images.length > 0 ? (
+            <div className="flex flex-row gap-4 items-center">
+              <div className="flex flex-row gap-2">
+                <CaretCircleLeftIcon
+                  size={30}
+                  weight="duotone"
+                  className={`${selectedIndex == 0 ? "text-gray-300" : "hover:text-pink-400 cursor-pointer"} transition-all duration-100`}
+                  onClick={() =>
+                    navigateImage({
+                      setSelectedIndex,
+                      direction: -1,
+                      imagesLength: images.length,
+                    })
+                  }
+                />
+                <CaretCircleRightIcon
+                  size={30}
+                  weight="duotone"
+                  className={`${selectedIndex == images.length - 1 ? "text-gray-300" : "hover:text-pink-400 cursor-pointer"} transition-all duration-100`}
+                  onClick={() =>
+                    navigateImage({
+                      setSelectedIndex,
+                      direction: 1,
+                      imagesLength: images.length,
+                    })
+                  }
+                />
+              </div>
+              <TrashIcon
+                size={32}
+                weight="duotone"
+                className="hover:text-red-400"
                 onClick={() =>
                   removeSelectedImage({
                     images,
@@ -75,20 +136,17 @@ export default function FileSelector({
                     setSelectedIndex,
                   })
                 }
-                className="cursor-pointer bg-red-200 rounded-xl py-2 px-4"
-              >
-                <TrashIcon size={20} weight="duotone" />
-              </button>
-            ) : (
-              ""
-            )}
-          </div>
+              />
+            </div>
+          ) : (
+            ""
+          )}
         </div>
         <div
           onClick={() => inputRef.current?.click()}
           onDragOver={(event) => event.preventDefault()}
           onDrop={handleDrop}
-          className={`w-full h-[256px] md:h-[256px] max-h-[256px] overflow-y-auto grid md:max-h-[320px]  ${images.length <= 7 ? "grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6" : "grid-cols-3 sm:grid-cols-5 md:grid-cols-7 lg:grid-cols-9"}  gap-2 ${images.length <= 0 ? "border border-gray-200 rounded-xl" : ""}`}
+          className={`w-full h-[256px] md:h-[256px] max-h-[256px] md:max-h-[320px] overflow-y-auto grid gap-2 select-none ${images.length <= 7 ? "grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6" : "grid-cols-3 sm:grid-cols-5 md:grid-cols-7 lg:grid-cols-9"} ${images.length <= 0 ? "border border-gray-200 rounded-xl" : ""}`}
         >
           <input
             ref={inputRef}
@@ -106,7 +164,7 @@ export default function FileSelector({
                   setSelectedIndex(index);
                 }}
                 key={index}
-                className={`${selectedIndex == index ? "bg-pink-200 shadow-sm" : "hover:bg-pink-100 bg-white"} h-auto flex flex-col items-center justify-between py-2 px-2 border border-gray-200 rounded-xl`}
+                className={`${selectedIndex == index ? "bg-pink-200 shadow-sm" : "hover:bg-pink-100 bg-white"} h-auto flex flex-col items-center justify-between p-2 border border-gray-200 rounded-xl`}
               >
                 <div className="h-full flex items-center justify-center mb-2">
                   <img

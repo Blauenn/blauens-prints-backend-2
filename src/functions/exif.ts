@@ -20,25 +20,15 @@ export async function parseImage(file: File): Promise<ImportedImageData> {
     const focalLength = exif?.LensSpecification?.[0];
     const focalLengthMax = exif?.LensSpecification?.[1];
 
-    const dimensions = file.name
-      .split("-")
-      .at(-1)
-      ?.split(".")[0]
-      .replaceAll(" ", "");
-
-    const width = Number(dimensions?.split("x")[0]);
-    const height = Number(dimensions?.split("x")[1]);
-
     const flash = exif?.Flash?.startsWith("Flash fired") ?? false;
 
     // Split "and" or "," into an array
-    let people = exif.ImageDescription.split(/\s+and\s+|,/)
+    const people = (exif?.ImageDescription ?? "")
+      .split(/\s+and\s+|,/)
       .map((person: string) => person.trim())
       .filter(Boolean);
 
     image.fileName = exif?.PreservedFileName;
-    image.width = width;
-    image.height = height;
     image.cameraName = exif?.Make;
     image.cameraModel = exif?.Model;
     image.lensModel = exif?.LensModel;
@@ -55,6 +45,13 @@ export async function parseImage(file: File): Promise<ImportedImageData> {
     image.keywords = exif?.subject ?? [];
   } catch (error) {
     console.error(`Failed to parse image: ${file.name}`, error);
+  }
+
+  const dimensions = file.name.match(/(\d+)\s*x\s*(\d+)/);
+
+  if (dimensions) {
+    image.width = Number(dimensions[1]);
+    image.height = Number(dimensions[2]);
   }
 
   return image;
