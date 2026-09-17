@@ -2,6 +2,8 @@ import type { ImportedImageData } from "#/types/Image";
 
 type Props = {
   selectedImage: ImportedImageData;
+  setImages: React.Dispatch<React.SetStateAction<ImportedImageData[]>>;
+  selectedIndex: number;
 };
 
 const categories = [
@@ -27,7 +29,11 @@ const categories = [
   },
 ];
 
-export default function FileCategory({ selectedImage }: Props) {
+export default function FileCategory({
+  selectedImage,
+  setImages,
+  selectedIndex,
+}: Props) {
   return (
     <div className="section-box">
       <div className="flex flex-col gap-4">
@@ -39,6 +45,19 @@ export default function FileCategory({ selectedImage }: Props) {
               (category) => category.id === selectedImage.category,
             )?.name
           }
+          onChange={(event) => {
+            const category = categories.find(
+              (category) => category.name === event.target.value,
+            );
+
+            setImages((current) =>
+              current.map((image, index) =>
+                index === selectedIndex
+                  ? { ...image, category: category.id }
+                  : image,
+              ),
+            );
+          }}
         >
           {categories.map((category) => (
             <option key={category.id} value={category.name}>

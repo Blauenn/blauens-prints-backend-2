@@ -43,6 +43,7 @@ export async function parseImage(file: File): Promise<ImportedImageData> {
     image.newDate = exif?.DateTimeOriginal;
     image.people = people;
     image.keywords = exif?.subject ?? [];
+    image.newKeywords = exif?.subject ?? [];
 
     // Category from keywords
     image.category = parseCategory(image.keywords);

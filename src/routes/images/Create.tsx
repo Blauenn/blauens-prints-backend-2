@@ -61,7 +61,11 @@ function RouteComponent() {
               selectedIndex={selectedIndex}
             />
 
-            <FileCategory selectedImage={selectedImage} />
+            <FileCategory
+              selectedImage={selectedImage}
+              setImages={setImages}
+              selectedIndex={selectedIndex}
+            />
           </section>
         ) : (
           ""

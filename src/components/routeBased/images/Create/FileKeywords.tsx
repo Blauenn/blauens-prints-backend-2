@@ -21,7 +21,7 @@ function removeKeyword(
 
   setImages((current) =>
     current.map((image, index) =>
-      index === selectedIndex ? { ...image, keywords: newKeywords } : image,
+      index === selectedIndex ? { ...image, newKeywords: newKeywords } : image,
     ),
   );
 }
@@ -61,7 +61,7 @@ export default function FileKeywords({
                 weight="regular"
                 onClick={() =>
                   removeKeyword(
-                    selectedImage.keywords,
+                    selectedImage.newKeywords,
                     keyword,
                     setImages,
                     selectedIndex,

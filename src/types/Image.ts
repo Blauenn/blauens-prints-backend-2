@@ -21,4 +21,5 @@ export type ImportedImageData = {
   newDate?: Date;
   people: string[];
   keywords: string[];
+  newKeywords: string[];
 };
