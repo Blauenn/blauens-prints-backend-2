@@ -6,20 +6,13 @@ import { CaretLeftIcon } from "@phosphor-icons/react";
 import { useState } from "react";
 import FileKeywords from "#/components/routeBased/images/Create/FileKeywords";
 import FileImageThumbnailUrls from "#/components/routeBased/images/Create/FileImageThumbnailUrls";
+import FileCategory from "#/components/routeBased/images/Create/FileCategory";
 
 export const Route = createFileRoute("/images/Create")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const categories = [
-    { id: 1, name: "Wiwi", name_short: "Wiwi" },
-    { id: 2, name: "Blauens Meisterwerk", name_short: "BM" },
-    { id: 3, name: "Non-Blauens-Meisterwerk", name_short: "Non-BM" },
-    { id: 4, name: "Random", name_short: "Random" },
-    { id: 5, name: "Four-Legged Friends", name_short: "FLF" },
-  ];
-
   const people = [
     { id: 1, facebook: "Mmantou", facebook_handle: "spr.ruk", instagram: "" },
     { id: 2, facebook: "Hirai Masako", facebook_handle: "", instagram: "" },
@@ -67,6 +60,8 @@ function RouteComponent() {
               setImages={setImages}
               selectedIndex={selectedIndex}
             />
+
+            <FileCategory selectedImage={selectedImage} />
           </section>
         ) : (
           ""
