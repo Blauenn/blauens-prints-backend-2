@@ -22,3 +22,7 @@ body {
 @utility button {
 	@apply cursor-pointer py-2 px-4 rounded-xl transition-all duration-100
 }
+
+@utility field {
+	@apply w-full bg-white border border-gray-200 rounded-xl py-2 px-4
+}

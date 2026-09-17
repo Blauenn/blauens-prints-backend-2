@@ -94,7 +94,11 @@ export default function FileStaticInformation({
     <section>
       <div className="section-box flex flex-col md:flex-row gap-8 items-start mb-4">
         <img
-          src={URL.createObjectURL(selectedImage.file)}
+          src={
+            selectedImage.imageUrl
+              ? selectedImage.imageUrl
+              : URL.createObjectURL(selectedImage.file)
+          }
           className={`w-full ${horizontalImage ? "md:w-[352px]" : "md:w-[256px]"} rounded-xl shadow-md`}
         />
 

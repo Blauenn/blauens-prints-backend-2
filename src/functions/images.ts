@@ -45,3 +45,16 @@ export function navigateImage({
     return nextIndex;
   });
 }
+
+export function updateSelectedImage(
+  field: keyof ImportedImageData,
+  value: string,
+  setImages: React.Dispatch<React.SetStateAction<ImportedImageData[]>>,
+  selectedIndex: number,
+) {
+  setImages((current) =>
+    current.map((image, index) =>
+      index === selectedIndex ? { ...image, [field]: value } : image,
+    ),
+  );
+}

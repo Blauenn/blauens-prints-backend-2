@@ -4,6 +4,7 @@ import type { ImportedImageData } from "#/types/Image";
 import {
   CaretCircleLeftIcon,
   CaretCircleRightIcon,
+  CloudArrowUpIcon,
   ImagesIcon,
   TrashIcon,
 } from "@phosphor-icons/react";
@@ -92,12 +93,29 @@ export default function FileSelector({
       <div className="section-box mb-4">
         <div className="flex items-center justify-between mb-4">
           <div className="flex flex-row items-center gap-2">
-            <ImagesIcon size={28} weight="duotone" />
-            <h1 className="text-2xl font-bold">Files selector</h1>
+            <ImagesIcon
+              size={28}
+              weight="duotone"
+              className="hidden md:block"
+            />
+            <h1 className="text-xl font-bold">Files selector</h1>
           </div>
 
           {images.length > 0 ? (
-            <div className="flex flex-row gap-4 items-center">
+            <div className="flex flex-row gap-4 md:gap-6 items-center">
+              <TrashIcon
+                size={32}
+                weight="duotone"
+                className="hover:text-red-400 transition-all duration-100"
+                onClick={() =>
+                  removeSelectedImage({
+                    images,
+                    setImages,
+                    selectedIndex,
+                    setSelectedIndex,
+                  })
+                }
+              />
               <div className="flex flex-row gap-2">
                 <CaretCircleLeftIcon
                   size={30}
@@ -124,18 +142,10 @@ export default function FileSelector({
                   }
                 />
               </div>
-              <TrashIcon
-                size={32}
+              <CloudArrowUpIcon
+                size={30}
                 weight="duotone"
-                className="hover:text-red-400"
-                onClick={() =>
-                  removeSelectedImage({
-                    images,
-                    setImages,
-                    selectedIndex,
-                    setSelectedIndex,
-                  })
-                }
+                className="hover:text-green-400 transition-all duration-100"
               />
             </div>
           ) : (
