@@ -13,18 +13,20 @@ import {
   MountainsIcon,
   TimerIcon,
 } from "@phosphor-icons/react";
-import FileStaticInformationLine from "./FileStaticInformationLine";
+import InformationLine from "./InformationLine";
 
 type Props = {
   selectedImage: ImportedImageData;
   setImages: React.Dispatch<React.SetStateAction<ImportedImageData[]>>;
   selectedIndex: number;
+  className?: string;
 };
 
 export default function FileStaticInformation({
   selectedImage,
   setImages,
   selectedIndex,
+  className,
 }: Props) {
   const staticDisplayValues = [
     {
@@ -92,7 +94,9 @@ export default function FileStaticInformation({
 
   return (
     <section>
-      <div className="section-box flex flex-col md:flex-row gap-8 items-start mb-4">
+      <div
+        className={`section-box flex flex-col md:flex-row gap-8 items-start ${className}`}
+      >
         <img
           src={
             selectedImage.imageUrl
@@ -114,24 +118,24 @@ export default function FileStaticInformation({
           </div>
 
           <div className="flex flex-col gap-2 mb-2">
-            <FileStaticInformationLine icon={ClockIcon} label="Digitized date">
+            <InformationLine icon={ClockIcon} label="Digitized date">
               <div className="flex flex-row items-center gap-2">
                 {dateDifference !== 0 ? (
                   dateDifference > 0 ? (
-                    <h1 className={`font-semibold text-green-400`}>
+                    <p className={`font-semibold text-green-400`}>
                       (+{dateDifference}hr)
-                    </h1>
+                    </p>
                   ) : (
-                    <h1 className={`font-semibold text-red-400`}>
+                    <p className={`font-semibold text-red-400`}>
                       ({dateDifference}hr)
-                    </h1>
+                    </p>
                   )
                 ) : (
                   ""
                 )}
-                <h1 className="text-right">
+                <p className="text-right">
                   {selectedImage.newDate?.toLocaleString()}
-                </h1>
+                </p>
                 <div className="flex flex-col items-center">
                   <CaretUpIcon
                     size={18}
@@ -155,15 +159,15 @@ export default function FileStaticInformation({
                   />
                 </div>
               </div>
-            </FileStaticInformationLine>
+            </InformationLine>
             {staticDisplayValues.map((item) => (
-              <FileStaticInformationLine
+              <InformationLine
                 icon={item.icon}
                 key={item.label}
                 label={item.label}
               >
-                <h1>{item.value}</h1>
-              </FileStaticInformationLine>
+                <p>{item.value}</p>
+              </InformationLine>
             ))}
           </div>
         </div>

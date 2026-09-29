@@ -1,3 +1,4 @@
+import { Categories } from "#/constants/categories";
 import { parseImage } from "#/functions/exif";
 import { navigateImage, removeSelectedImage } from "#/functions/images";
 import type { ImportedImageData } from "#/types/Image";
@@ -15,6 +16,7 @@ type Props = {
   setImages: React.Dispatch<React.SetStateAction<ImportedImageData[]>>;
   selectedIndex: number;
   setSelectedIndex: React.Dispatch<React.SetStateAction<number>>;
+  className?: string;
 };
 
 export default function FileSelector({
@@ -22,6 +24,7 @@ export default function FileSelector({
   setImages,
   selectedIndex,
   setSelectedIndex,
+  className,
 }: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -90,7 +93,7 @@ export default function FileSelector({
 
   return (
     <section>
-      <div className="section-box mb-4">
+      <div className={`section-box ${className}`}>
         <div className="flex items-center justify-between mb-4">
           <div className="flex flex-row items-center gap-2">
             <ImagesIcon
@@ -98,7 +101,7 @@ export default function FileSelector({
               weight="duotone"
               className="hidden md:block"
             />
-            <h1 className="text-xl font-bold">Files selector</h1>
+            <h1 className="text-xl font-bold">File selector</h1>
           </div>
 
           {images.length > 0 ? (
@@ -118,7 +121,7 @@ export default function FileSelector({
               />
               <div className="flex flex-row gap-2">
                 <CaretCircleLeftIcon
-                  size={30}
+                  size={28}
                   weight="duotone"
                   className={`${selectedIndex == 0 ? "text-gray-300" : "hover:text-pink-400 cursor-pointer"} transition-all duration-100`}
                   onClick={() =>
@@ -130,7 +133,7 @@ export default function FileSelector({
                   }
                 />
                 <CaretCircleRightIcon
-                  size={30}
+                  size={28}
                   weight="duotone"
                   className={`${selectedIndex == images.length - 1 ? "text-gray-300" : "hover:text-pink-400 cursor-pointer"} transition-all duration-100`}
                   onClick={() =>
@@ -143,7 +146,7 @@ export default function FileSelector({
                 />
               </div>
               <CloudArrowUpIcon
-                size={30}
+                size={28}
                 weight="duotone"
                 className="hover:text-green-400 transition-all duration-100"
               />
@@ -174,7 +177,7 @@ export default function FileSelector({
                   setSelectedIndex(index);
                 }}
                 key={index}
-                className={`${selectedIndex == index ? "bg-pink-200 shadow-sm" : "hover:bg-pink-100 bg-white"} h-auto flex flex-col items-center justify-between p-2 border border-gray-200 rounded-xl`}
+                className={`${selectedIndex == index ? `${Categories[image.category - 1].background_soft} shadow-sm` : "hover:bg-gray-200 bg-white"} h-auto flex flex-col items-center justify-between p-2 border border-gray-200 rounded-xl transition-all duration-100`}
               >
                 <div className="h-full flex items-center justify-center mb-2">
                   <img
@@ -182,17 +185,17 @@ export default function FileSelector({
                     className="rounded-md shadow-sm"
                   />
                 </div>
-                <h1 className="w-full text-xs font-semibold md:font-normal md:text-[12px] truncate text-center">
+                <p className="w-full text-xs font-semibold md:font-normal md:text-[12px] truncate text-center">
                   {image.fileName}
-                </h1>
+                </p>
               </div>
             ))
           ) : (
             <div className="col-span-full h-auto flex flex-col gap-4 items-center justify-center">
               <ImagesIcon size={64} className="opacity-50" />
-              <h1 className="text-xl italic opacity-50">
+              <p className="text-xl italic opacity-50">
                 Drag and drop images here...
-              </h1>
+              </p>
             </div>
           )}
         </div>

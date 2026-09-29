@@ -1,70 +1,51 @@
+import { Categories } from "#/constants/categories";
 import type { ImportedImageData } from "#/types/Image";
 
 type Props = {
   selectedImage: ImportedImageData;
   setImages: React.Dispatch<React.SetStateAction<ImportedImageData[]>>;
   selectedIndex: number;
+  className?: string;
 };
-
-const categories = [
-  { id: 1, name: "Wiwi", name_short: "Wiwi", color: "text-purple-400" },
-  {
-    id: 2,
-    name: "Blauens Meisterwerk",
-    name_short: "BM",
-    color: "text-pink-400",
-  },
-  {
-    id: 3,
-    name: "Non-Blauens-Meisterwerk",
-    name_short: "Non-BM",
-    color: "text-green-400",
-  },
-  { id: 4, name: "Random", name_short: "Random", color: "text-blue-400" },
-  {
-    id: 5,
-    name: "Four-Legged Friends",
-    name_short: "FLF",
-    color: "text-orange-400",
-  },
-];
 
 export default function FileCategory({
   selectedImage,
   setImages,
   selectedIndex,
+  className,
 }: Props) {
-  return (
-    <div className="section-box">
-      <div className="flex flex-col gap-4">
-        <h1 className="text-xl">Category</h1>
-        <select
-          className="text-xl md:text-3xl font-bold"
-          value={
-            categories.find(
-              (category) => category.id === selectedImage.category,
-            )?.name
-          }
-          onChange={(event) => {
-            const category = categories.find(
-              (category) => category.name === event.target.value,
-            );
+  function handleCategoryChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const categoryId = Number(event.target.value);
 
-            setImages((current) =>
-              current.map((image, index) =>
-                index === selectedIndex
-                  ? { ...image, category: category.id }
-                  : image,
-              ),
-            );
-          }}
-        >
-          {categories.map((category) => (
-            <option key={category.id} value={category.name}>
-              {category.name}
-            </option>
+    setImages((current) =>
+      current.map((image, index) =>
+        index === selectedIndex ? { ...image, category: categoryId } : image,
+      ),
+    );
+  }
+
+  return (
+    <div className={`section-box ${className}`}>
+      <div className="flex flex-col gap-4">
+        <h1 className="text-2xl font-bold mb-2">Category</h1>
+        <div className="flex flex-wrap gap-2">
+          {Categories.map((category) => (
+            <label
+              key={category.id}
+              className={`button border border-gray-200 hover:border-invisible hover:text-white ${category.background_hover} ${selectedImage.category === category.id ? `text-white border-invisible ${category.background}` : ""} transition-all duration-100`}
+            >
+              <input
+                type="radio"
+                name="category"
+                value={category.id}
+                checked={selectedImage.category === category.id}
+                onChange={handleCategoryChange}
+                className="hidden"
+              />
+              <span>{category.name}</span>
+            </label>
           ))}
-        </select>
+        </div>
       </div>
     </div>
   );

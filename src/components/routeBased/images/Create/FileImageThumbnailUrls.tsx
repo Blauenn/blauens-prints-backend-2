@@ -10,19 +10,23 @@ type Props = {
   selectedImage: ImportedImageData;
   setImages: React.Dispatch<React.SetStateAction<ImportedImageData[]>>;
   selectedIndex: number;
+  className?: string;
 };
 
 export default function FileImageThumbnailUrls({
   selectedImage,
   setImages,
   selectedIndex,
+  className,
 }: Props) {
   return (
     <section>
-      <div className="section-box flex flex-col md:grid md:grid-cols-7 gap-4 md:gap-8 mb-4">
+      <div
+        className={`section-box flex flex-col md:grid md:grid-cols-7 gap-4 md:gap-8 ${className}`}
+      >
         {/* Image URL */}
         <div className="flex flex-row col-span-3 gap-4 items-center">
-          <ImageIcon size={28} weight="duotone" className="text-green-500" />
+          <ImageIcon size={28} weight="duotone" className="opacity-50" />
           <input
             placeholder="Image URL"
             value={selectedImage.imageUrl}
@@ -60,11 +64,7 @@ export default function FileImageThumbnailUrls({
 
         {/* Thumbnail URL */}
         <div className="flex flex-row col-span-3 gap-4 items-center">
-          <ImageSquareIcon
-            size={28}
-            weight="duotone"
-            className="text-blue-500"
-          />
+          <ImageSquareIcon size={28} weight="duotone" className="opacity-50" />
           <input
             placeholder="Thumbnail URL"
             value={selectedImage.thumbnailUrl}

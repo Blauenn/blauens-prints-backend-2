@@ -8,12 +8,24 @@ function Home() {
       <h1 className="text-2xl font-bold mb-2">Blauens Prints Backend 2</h1>
       <p className="text-lg mb-8">This is it!</p>
 
-      <Link
-        to="/images/Create"
-        className="text-xl border border-black bg-pink-100 px-8 py-4 rounded-xl"
-      >
-        Create
-      </Link>
+      <div className="">
+        <h1 className="text-2xl font bold mb-4">Images</h1>
+        <div className="flex flex-row gap-4">
+          <Link
+            to="/images/Create"
+            className="button text-xl py-4 px-8 bg-green-200 hover:bg-green-300"
+          >
+            Create
+          </Link>
+
+          <Link
+            to="/images/Update"
+            className="button text-xl py-4 px-8 bg-blue-200 hover:bg-blue-300"
+          >
+            Update
+          </Link>
+        </div>
+      </div>
     </div>
   );
 }

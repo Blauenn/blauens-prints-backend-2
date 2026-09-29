@@ -48,7 +48,7 @@ export function navigateImage({
 
 export function updateSelectedImage(
   field: keyof ImportedImageData,
-  value: string,
+  value: string | string[],
   setImages: React.Dispatch<React.SetStateAction<ImportedImageData[]>>,
   selectedIndex: number,
 ) {

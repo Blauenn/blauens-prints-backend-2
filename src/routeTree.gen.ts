@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ImagesCreateRouteImport } from './routes/images/Create'
+import { Route as ImagesUpdateRouteImport } from './routes/images/Update'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -22,31 +23,40 @@ const ImagesCreateRoute = ImagesCreateRouteImport.update({
   path: '/images/Create',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ImagesUpdateRoute = ImagesUpdateRouteImport.update({
+  id: '/images/Update',
+  path: '/images/Update',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/images/Create': typeof ImagesCreateRoute
+  '/images/Update': typeof ImagesUpdateRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/images/Create': typeof ImagesCreateRoute
+  '/images/Update': typeof ImagesUpdateRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/images/Create': typeof ImagesCreateRoute
+  '/images/Update': typeof ImagesUpdateRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/images/Create'
+  fullPaths: '/' | '/images/Create' | '/images/Update'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/images/Create'
-  id: '__root__' | '/' | '/images/Create'
+  to: '/' | '/images/Create' | '/images/Update'
+  id: '__root__' | '/' | '/images/Create' | '/images/Update'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ImagesCreateRoute: typeof ImagesCreateRoute
+  ImagesUpdateRoute: typeof ImagesUpdateRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -65,12 +75,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ImagesCreateRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/images/Update': {
+      id: '/images/Update'
+      path: '/images/Update'
+      fullPath: '/images/Update'
+      preLoaderRoute: typeof ImagesUpdateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ImagesCreateRoute: ImagesCreateRoute,
+  ImagesUpdateRoute: ImagesUpdateRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
