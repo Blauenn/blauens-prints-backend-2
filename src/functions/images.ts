@@ -1,4 +1,5 @@
 import type { ImportedImageData } from "#/types/Image";
+import type { People } from "#/types/People";
 
 type RemoveSelectedImage = {
   images: ImportedImageData[];
@@ -48,7 +49,7 @@ export function navigateImage({
 
 export function updateSelectedImage(
   field: keyof ImportedImageData,
-  value: string | string[],
+  value: string | string[] | People[],
   setImages: React.Dispatch<React.SetStateAction<ImportedImageData[]>>,
   selectedIndex: number,
 ) {

@@ -4,13 +4,16 @@ import type { People } from "#/types/People";
 import {
   AtIcon,
   FacebookLogoIcon,
+  IdentificationBadgeIcon,
   InstagramLogoIcon,
-  UserSquareIcon,
+  LegoSmileyIcon,
   XCircleIcon,
 } from "@phosphor-icons/react";
 import type React from "react";
 import { useState } from "react";
 import InformationLine from "./InformationLine";
+import { updateSelectedImage } from "#/functions/images";
+import FilePeopleAddButton from "./FilePeopleAddButton";
 
 type Props = {
   selectedImage: ImportedImageData;
@@ -32,56 +35,102 @@ export default function FilePeople({
   className,
 }: Props) {
   const [hoveredPersonId, setHoveredPersonId] = useState<number | null>(null);
-
   const hoveredPerson = people.find((person) => person.id === hoveredPersonId);
 
   const filteredPeople = people.filter((person) => {
-    return (person.facebook || person.facebook_handle || person.instagram)
+    const matchesSearch = (
+      person.facebook ||
+      person.facebook_handle ||
+      person.instagram
+    )
       .toLowerCase()
       .includes(peopleSearch.toLowerCase());
+
+    const isSelected = selectedImage.people.some(
+      (selected) => selected.id === person.id,
+    );
+
+    return matchesSearch && !isSelected;
   });
 
   return (
     <div className="section-box">
       <div className="flex flex-row gap-4">
-        <div className="w-[60%] flex flex-col gap-4">
-          <div
-            className={`field flex items-center gap-2 ${Categories[selectedImage.category - 1].focus_within} ${className}`}
-          >
-            <input
-              placeholder="Search people..."
-              value={peopleSearch}
-              onChange={(event) => {
-                setPeopleSearch(event.target.value);
-              }}
-              className="flex-1 outline-none"
-            />
-
-            <button
-              type="button"
-              onClick={() => setPeopleSearch("")}
-              className="cursor-pointer opacity-50 hover:text-red-400 hover:opacity-100 transition-all duration-100"
+        <div className="w-[60%] flex flex-col justify-between">
+          <div className="flex flex-col gap-4">
+            <div
+              className={`field flex items-center gap-2 ${Categories[selectedImage.category - 1].focus_within} ${className}`}
             >
-              <XCircleIcon size={20} />
-            </button>
-          </div>
+              <input
+                placeholder="Search people..."
+                value={peopleSearch}
+                onChange={(event) => {
+                  setPeopleSearch(event.target.value);
+                }}
+                className="flex-1 outline-none"
+              />
 
-          <div className="max-h-[256px] overflow-y-scroll flex flex-wrap gap-2">
-            {filteredPeople.map((person: People) => (
-              <div
-                key={person.id}
-                onMouseEnter={() => setHoveredPersonId(person.id)}
-                className={`button border border-gray-200 hover:text-white hover:border-invisible ${Categories[selectedImage.category - 1].background_hover} hover:border-invisible`}
+              <button
+                type="button"
+                onClick={() => setPeopleSearch("")}
+                className="cursor-pointer opacity-50 hover:text-red-400 hover:opacity-100 transition-all duration-100"
               >
-                <p>{person.facebook || person.instagram}</p>
-              </div>
-            ))}
+                <XCircleIcon size={20} />
+              </button>
+            </div>
+
+            <div className="max-h-[128px] overflow-y-scroll flex flex-wrap gap-2 pb-4">
+              <FilePeopleAddButton
+                setImages={setImages}
+                selectedIndex={selectedIndex}
+                peopleSearch={peopleSearch}
+                unresolvedPeople={selectedImage.unresolvedPeople}
+              />
+
+              {selectedImage.people.map((person: People) => (
+                <div
+                  key={person.id}
+                  onClick={() => {
+                    updateSelectedImage(
+                      "people",
+                      selectedImage.people.filter(
+                        (selectedPerson) => selectedPerson.id !== person.id,
+                      ),
+                      setImages,
+                      selectedIndex,
+                    );
+                  }}
+                  onMouseEnter={() => setHoveredPersonId(person.id)}
+                  className={`button border text-white border-invisible ${Categories[selectedImage.category - 1].background} hover:border-gray-200 hover:bg-transparent hover:text-black hover:italic`}
+                >
+                  <p>{person.facebook || person.instagram}</p>
+                </div>
+              ))}
+
+              {filteredPeople.map((person: People) => (
+                <div
+                  key={person.id}
+                  onClick={() =>
+                    updateSelectedImage(
+                      "people",
+                      [...selectedImage.people, person],
+                      setImages,
+                      selectedIndex,
+                    )
+                  }
+                  onMouseEnter={() => setHoveredPersonId(person.id)}
+                  className={`button border border-gray-200 hover:text-white ${Categories[selectedImage.category - 1].background_hover} hover:border-invisible`}
+                >
+                  <p>{person.facebook || person.instagram}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
         <div className="w-[40%] min-h-[256px] section-box h-full">
           <div className="flex flex-row gap-4 items-center justify-start mb-4">
-            <UserSquareIcon size={28} weight="duotone" />
+            <IdentificationBadgeIcon size={28} weight="duotone" />
             <h1 className="text-xl font-semibold">Person information</h1>
           </div>
           {hoveredPerson ? (

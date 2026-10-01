@@ -30,7 +30,7 @@ export default function FileImageThumbnailUrls({
           <input
             placeholder="Image URL"
             value={selectedImage.imageUrl}
-            className={`field`}
+            className={`field w-full`}
             onChange={(event) => {
               updateSelectedImage(
                 "imageUrl",
@@ -68,7 +68,7 @@ export default function FileImageThumbnailUrls({
           <input
             placeholder="Thumbnail URL"
             value={selectedImage.thumbnailUrl}
-            className={`field`}
+            className={`field w-full`}
             onChange={(event) => {
               updateSelectedImage(
                 "thumbnailUrl",

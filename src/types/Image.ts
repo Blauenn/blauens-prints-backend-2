@@ -1,3 +1,5 @@
+import type { People } from "./People";
+
 export type ImportedImageData = {
   file: File;
   category: number;
@@ -19,7 +21,8 @@ export type ImportedImageData = {
   flash: boolean;
   dateTimeOriginal?: Date;
   newDate?: Date;
-  people: string[];
+  unresolvedPeople: string[];
+  people: People[];
   keywords: string[];
   newKeywords: string[];
 };

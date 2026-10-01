@@ -23,7 +23,7 @@ export async function parseImage(file: File): Promise<ImportedImageData> {
     const flash = exif?.Flash?.startsWith("Flash fired") ?? false;
 
     // Split "and" or "," into an array
-    const people = (exif?.ImageDescription ?? "")
+    const peoplePlain = (exif?.ImageDescription ?? "")
       .split(/\s+and\s+|,/)
       .map((person: string) => person.trim())
       .filter(Boolean);
@@ -41,7 +41,8 @@ export async function parseImage(file: File): Promise<ImportedImageData> {
     image.flash = flash;
     image.dateTimeOriginal = exif?.DateTimeOriginal;
     image.newDate = exif?.DateTimeOriginal;
-    image.people = people;
+    image.people = [];
+    image.unresolvedPeople = peoplePlain;
     image.keywords = exif?.subject ?? [];
     image.newKeywords = exif?.subject ?? [];
 

@@ -72,7 +72,7 @@ export default function FileKeywords({
                     selectedIndex,
                   )
                 }
-                className={`button flex flex-row items-center justify-between gap-2 bg-gray-200 hover:bg-red-400 hover:text-white`}
+                className={`button flex flex-row items-center justify-between gap-2 bg-gray-200 hover:bg-red-400 hover:text-white hover:italic`}
               >
                 <p>{keyword}</p>
               </div>

@@ -67,6 +67,17 @@ export default function FileSelector({
 
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
+      const target = event.target as HTMLElement;
+
+      // Ignore keypress if an input is focused
+      if (
+        target instanceof HTMLInputElement ||
+        target instanceof HTMLTextAreaElement ||
+        target instanceof HTMLSelectElement
+      ) {
+        return;
+      }
+
       if (event.key === "ArrowLeft") {
         navigateImage({
           setSelectedIndex,

@@ -54,6 +54,12 @@ function RouteComponent() {
                 selectedIndex={selectedIndex}
               />
 
+              <FileKeywords
+                selectedImage={selectedImage}
+                setImages={setImages}
+                selectedIndex={selectedIndex}
+              />
+
               <FilePeople
                 selectedImage={selectedImage}
                 setImages={setImages}
@@ -70,11 +76,6 @@ function RouteComponent() {
               />
 
               <FileCategory
-                selectedImage={selectedImage}
-                setImages={setImages}
-                selectedIndex={selectedIndex}
-              />
-              <FileKeywords
                 selectedImage={selectedImage}
                 setImages={setImages}
                 selectedIndex={selectedIndex}
