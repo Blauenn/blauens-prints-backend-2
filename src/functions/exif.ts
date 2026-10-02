@@ -1,3 +1,4 @@
+import { people } from "#/data/people";
 import type { ImportedImageData } from "#/types/Image";
 import exifr from "exifr";
 
@@ -45,6 +46,23 @@ export async function parseImage(file: File): Promise<ImportedImageData> {
     image.unresolvedPeople = peoplePlain;
     image.keywords = exif?.subject ?? [];
     image.newKeywords = exif?.subject ?? [];
+
+    // Check if parsed person in the ImageDescription exists in the people table,
+    // if it does, preselect that person by adding the object to image.people
+    if (image.unresolvedPeople.length > 0) {
+      image.unresolvedPeople = image.unresolvedPeople.filter((name) => {
+        const matchedPerson = people.find(
+          (person) => person.facebook === name || person.instagram === name,
+        );
+
+        if (matchedPerson) {
+          image.people.push(matchedPerson);
+          return false;
+        }
+
+        return true;
+      });
+    }
 
     // Category from keywords
     image.category = parseCategory(image.keywords);

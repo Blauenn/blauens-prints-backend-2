@@ -6,6 +6,7 @@ import {
   XCircleIcon,
 } from "@phosphor-icons/react";
 import React, { useEffect, useState, type SetStateAction } from "react";
+import { addPerson } from "#/data/people";
 
 type Props = {
   setImages?: React.Dispatch<SetStateAction<ImportedImageData[]>>;
@@ -31,6 +32,13 @@ export default function FilePeopleAddButtonField({
   }, [defaultValue]);
 
   const [addingPersonValue, setAddingPersonValue] = useState(defaultValue);
+
+  async function handleAddPerson() {
+    await addPerson({
+      value: addingPersonValue,
+      addingInstagram: isInstagram,
+    });
+  }
 
   return (
     <div
@@ -65,13 +73,7 @@ export default function FilePeopleAddButtonField({
             className="button-icon hover:text-red-400"
           />
         </button>
-        <button
-          type="button"
-          onClick={() => {
-            console.log(addingPersonValue);
-          }}
-          className="group"
-        >
+        <button type="button" onClick={handleAddPerson} className="group">
           <CheckCircleIcon
             size={22}
             weight="duotone"

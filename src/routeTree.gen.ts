@@ -10,8 +10,8 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as ImagesCreateRouteImport } from './routes/images/Create'
-import { Route as ImagesUpdateRouteImport } from './routes/images/Update'
+import { Route as ImagesCreateRouteImport } from './routes/images/create'
+import { Route as ImagesUpdateRouteImport } from './routes/images/update'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -19,38 +19,38 @@ const IndexRoute = IndexRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const ImagesCreateRoute = ImagesCreateRouteImport.update({
-  id: '/images/Create',
-  path: '/images/Create',
+  id: '/images/create',
+  path: '/images/create',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ImagesUpdateRoute = ImagesUpdateRouteImport.update({
-  id: '/images/Update',
-  path: '/images/Update',
+  id: '/images/update',
+  path: '/images/update',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/images/Create': typeof ImagesCreateRoute
-  '/images/Update': typeof ImagesUpdateRoute
+  '/images/create': typeof ImagesCreateRoute
+  '/images/update': typeof ImagesUpdateRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/images/Create': typeof ImagesCreateRoute
-  '/images/Update': typeof ImagesUpdateRoute
+  '/images/create': typeof ImagesCreateRoute
+  '/images/update': typeof ImagesUpdateRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/images/Create': typeof ImagesCreateRoute
-  '/images/Update': typeof ImagesUpdateRoute
+  '/images/create': typeof ImagesCreateRoute
+  '/images/update': typeof ImagesUpdateRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/images/Create' | '/images/Update'
+  fullPaths: '/' | '/images/create' | '/images/update'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/images/Create' | '/images/Update'
-  id: '__root__' | '/' | '/images/Create' | '/images/Update'
+  to: '/' | '/images/create' | '/images/update'
+  id: '__root__' | '/' | '/images/create' | '/images/update'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -68,17 +68,17 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/images/Create': {
-      id: '/images/Create'
-      path: '/images/Create'
-      fullPath: '/images/Create'
+    '/images/create': {
+      id: '/images/create'
+      path: '/images/create'
+      fullPath: '/images/create'
       preLoaderRoute: typeof ImagesCreateRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/images/Update': {
-      id: '/images/Update'
-      path: '/images/Update'
-      fullPath: '/images/Update'
+    '/images/update': {
+      id: '/images/update'
+      path: '/images/update'
+      fullPath: '/images/update'
       preLoaderRoute: typeof ImagesUpdateRouteImport
       parentRoute: typeof rootRouteImport
     }

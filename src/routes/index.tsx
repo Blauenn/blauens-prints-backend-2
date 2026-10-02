@@ -12,14 +12,14 @@ function Home() {
         <h1 className="text-2xl font bold mb-4">Images</h1>
         <div className="flex flex-row gap-4">
           <Link
-            to="/images/Create"
+            to="/images/create"
             className="button text-xl py-4 px-8 bg-green-200 hover:bg-green-300"
           >
             Create
           </Link>
 
           <Link
-            to="/images/Update"
+            to="/images/update"
             className="button text-xl py-4 px-8 bg-blue-200 hover:bg-blue-300"
           >
             Update

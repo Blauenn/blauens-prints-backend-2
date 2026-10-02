@@ -4,3 +4,8 @@ export type People = {
   facebook_handle: string;
   instagram: string;
 };
+
+export type AddPersonToDBData = {
+  value: string;
+  addingInstagram: boolean;
+};
