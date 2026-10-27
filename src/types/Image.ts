@@ -1,4 +1,5 @@
 import type { People } from "./People";
+import type { PrintJob } from "./Prints";
 
 export type ImportedImageData = {
   file: File;
@@ -23,6 +24,7 @@ export type ImportedImageData = {
   newDate?: Date;
   unresolvedPeople: string[];
   people: People[];
+  printJobs: PrintJob[];
   keywords: string[];
   newKeywords: string[];
 };

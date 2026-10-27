@@ -1,6 +1,9 @@
 import { people } from "#/data/people";
 import type { ImportedImageData } from "#/types/Image";
 import exifr from "exifr";
+import { normalizePersonName } from "./strings";
+import type { People } from "#/types/People";
+import { getNextImageNumber } from "#/data/images";
 
 export async function parseImage(file: File): Promise<ImportedImageData> {
   const image: ImportedImageData = {
@@ -12,7 +15,10 @@ export async function parseImage(file: File): Promise<ImportedImageData> {
     thumbnailUrl: "",
     flash: false,
     people: [],
+    unresolvedPeople: [],
+    printJobs: [],
     keywords: [],
+    newKeywords: [],
   };
 
   try {
@@ -47,25 +53,16 @@ export async function parseImage(file: File): Promise<ImportedImageData> {
     image.keywords = exif?.subject ?? [];
     image.newKeywords = exif?.subject ?? [];
 
-    // Check if parsed person in the ImageDescription exists in the people table,
-    // if it does, preselect that person by adding the object to image.people
-    if (image.unresolvedPeople.length > 0) {
-      image.unresolvedPeople = image.unresolvedPeople.filter((name) => {
-        const matchedPerson = people.find(
-          (person) => person.facebook === name || person.instagram === name,
-        );
-
-        if (matchedPerson) {
-          image.people.push(matchedPerson);
-          return false;
-        }
-
-        return true;
-      });
-    }
+    resolvePeople(image.unresolvedPeople, image.people);
 
     // Category from keywords
-    image.category = parseCategory(image.keywords);
+    const imageIdentity: {
+      category: number;
+      number: number;
+    } = parseCategory(image.keywords);
+
+    image.category = imageIdentity.category;
+    image.number = imageIdentity.number;
   } catch (error) {
     console.error(`Failed to parse image: ${file.name}`, error);
   }
@@ -99,19 +96,51 @@ const categoryMap: Record<string, number> = {
 };
 
 function parseCategory(keywords: string[]) {
+  let category = 1;
+
   for (const keyword of keywords) {
     const normalizedKeyword = keyword.toLowerCase();
 
     if (/^blauens meisterwerk \(vol\.\d+\)$/.test(normalizedKeyword)) {
-      return 2;
+      category = 2;
+      break;
     }
 
-    const category = categoryMap[normalizedKeyword];
+    const mappedCategory = categoryMap[normalizedKeyword];
 
-    if (category !== undefined) {
-      return category;
+    if (mappedCategory !== undefined) {
+      category = mappedCategory;
+      break;
     }
   }
 
-  return 1;
+  return {
+    category,
+    number: getNextImageNumber(category),
+  };
+}
+
+export function resolvePeople(
+  unresolvedPeople: string[],
+  selectedPeople: People[],
+) {
+  // Check if parsed person in the ImageDescription exists in the people table,
+  // if it does, preselect that person by adding the object to image.people
+  const remainingPeople = unresolvedPeople.filter((name) => {
+    const normalizedName = normalizePersonName(name);
+
+    const matchedPerson = people.find(
+      (person) =>
+        normalizePersonName(person.facebook ?? "") === normalizedName ||
+        normalizePersonName(person.instagram ?? "") === normalizedName,
+    );
+    if (matchedPerson) {
+      selectedPeople.push(matchedPerson);
+      return false;
+    }
+
+    return true;
+  });
+
+  unresolvedPeople.splice(0, unresolvedPeople.length, ...remainingPeople);
 }

@@ -2,10 +2,12 @@ import { PlusCircleIcon } from "@phosphor-icons/react";
 import { useState, type SetStateAction } from "react";
 import FilePeopleAddButtonField from "./FilePeopleAddButtonField";
 import type { ImportedImageData } from "#/types/Image";
+import type { People } from "#/types/People";
 
 type Props = {
   setImages: React.Dispatch<SetStateAction<ImportedImageData[]>>;
   selectedIndex: number;
+  setPeople: React.Dispatch<SetStateAction<People[]>>;
   peopleSearch: string;
   unresolvedPeople: string[];
 };
@@ -13,6 +15,7 @@ type Props = {
 export default function FilePeopleAddButton({
   setImages,
   selectedIndex,
+  setPeople,
   peopleSearch,
   unresolvedPeople,
 }: Props) {
@@ -27,6 +30,7 @@ export default function FilePeopleAddButton({
               key={person}
               setImages={setImages}
               selectedIndex={selectedIndex}
+              setPeople={setPeople}
               setAddingPerson={setAddingPerson}
               defaultValue={person}
               unresolvedPeople={unresolvedPeople}
@@ -46,6 +50,9 @@ export default function FilePeopleAddButton({
       ) : (
         <div className="flex flex-wrap gap-2">
           <FilePeopleAddButtonField
+            setImages={setImages}
+            selectedIndex={selectedIndex}
+            setPeople={setPeople}
             setAddingPerson={setAddingPerson}
             defaultValue={peopleSearch}
           />

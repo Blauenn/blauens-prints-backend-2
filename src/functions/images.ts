@@ -1,5 +1,6 @@
 import type { ImportedImageData } from "#/types/Image";
 import type { People } from "#/types/People";
+import { resolvePeople } from "./exif";
 
 type RemoveSelectedImage = {
   images: ImportedImageData[];
@@ -29,12 +30,14 @@ type NavigateImageProps = {
   setSelectedIndex: React.Dispatch<React.SetStateAction<number>>;
   direction: number;
   imagesLength: number;
+  setImages: React.Dispatch<React.SetStateAction<ImportedImageData[]>>;
 };
 
 export function navigateImage({
   setSelectedIndex,
   direction,
   imagesLength,
+  setImages,
 }: NavigateImageProps) {
   setSelectedIndex((current) => {
     const nextIndex = current + direction;
@@ -43,13 +46,25 @@ export function navigateImage({
       return current;
     }
 
+    setImages((currentImages) =>
+      currentImages.map((image, index) => {
+        if (index !== nextIndex) {
+          return image;
+        }
+
+        resolvePeople(image.unresolvedPeople, image.people);
+
+        return { ...image };
+      }),
+    );
+
     return nextIndex;
   });
 }
 
 export function updateSelectedImage(
   field: keyof ImportedImageData,
-  value: string | string[] | People[],
+  value: ImportedImageData[keyof ImportedImageData],
   setImages: React.Dispatch<React.SetStateAction<ImportedImageData[]>>,
   selectedIndex: number,
 ) {

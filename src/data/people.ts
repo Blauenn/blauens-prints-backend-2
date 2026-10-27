@@ -10,12 +10,14 @@ export async function getPeople() {
 }
 
 export async function addPerson({ value, addingInstagram }: AddPersonToDBData) {
-  const result = await addPersonToDB({
+  const person = await addPersonToDB({
     data: {
       value,
       addingInstagram,
     },
   });
 
-  return result;
+  people.push(person);
+
+  return person;
 }

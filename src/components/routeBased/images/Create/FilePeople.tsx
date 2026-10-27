@@ -6,7 +6,6 @@ import {
   FacebookLogoIcon,
   IdentificationBadgeIcon,
   InstagramLogoIcon,
-  LegoSmileyIcon,
   XCircleIcon,
 } from "@phosphor-icons/react";
 import type React from "react";
@@ -20,6 +19,7 @@ type Props = {
   setImages: React.Dispatch<React.SetStateAction<ImportedImageData[]>>;
   selectedIndex: number;
   people: People[];
+  setPeople: React.Dispatch<React.SetStateAction<People[]>>;
   peopleSearch: string;
   setPeopleSearch: React.Dispatch<React.SetStateAction<string>>;
   className?: string;
@@ -30,6 +30,7 @@ export default function FilePeople({
   setImages,
   selectedIndex,
   people,
+  setPeople,
   peopleSearch,
   setPeopleSearch,
   className,
@@ -54,7 +55,7 @@ export default function FilePeople({
   });
 
   return (
-    <div className="section-box">
+    <section className={`section-box ${className}`}>
       <div className="flex flex-row gap-4">
         <div className="w-[60%] flex flex-col justify-between">
           <div className="flex flex-col gap-4">
@@ -79,10 +80,11 @@ export default function FilePeople({
               </button>
             </div>
 
-            <div className="max-h-[128px] overflow-y-scroll flex flex-wrap gap-2 pb-4">
+            <div className="max-h-[256px] overflow-y-scroll flex flex-wrap gap-2 pb-4">
               <FilePeopleAddButton
                 setImages={setImages}
                 selectedIndex={selectedIndex}
+                setPeople={setPeople}
                 peopleSearch={peopleSearch}
                 unresolvedPeople={selectedImage.unresolvedPeople}
               />
@@ -174,6 +176,6 @@ export default function FilePeople({
           )}
         </div>
       </div>
-    </div>
+    </section>
   );
 }

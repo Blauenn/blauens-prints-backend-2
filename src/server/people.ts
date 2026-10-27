@@ -1,17 +1,12 @@
 import { createServerFn } from "@tanstack/react-start";
 import { db } from "#/db";
-import { sql } from "drizzle-orm";
+import { people as peopleTable } from "../../drizzle/schema";
 import type { AddPersonToDBData } from "#/types/People";
 
 export const getPeopleFromDB = createServerFn({
   method: "GET",
 }).handler(async () => {
-  const result = await db.execute(`
-    SELECT *
-    FROM people
-  `);
-
-  return result.rows;
+  return await db.select().from(peopleTable);
 });
 
 export const addPersonToDB = createServerFn({
@@ -19,18 +14,9 @@ export const addPersonToDB = createServerFn({
 }).handler(async ({ data }: AddPersonToDBData) => {
   const { value, addingInstagram } = data;
 
-  const result = addingInstagram
-    ? await db.execute(sql`
-      INSERT INTO people (instagram)
-      VALUES (${value})
-      RETURNING *`)
-    : await db.execute(sql`
-			  INSERT INTO people (facebook)
-			  VALUES (${value})
-			  RETURNING *
-			  `);
+  const [person] = addingInstagram
+    ? await db.insert(peopleTable).values({ instagram: value }).returning()
+    : await db.insert(peopleTable).values({ facebook: value }).returning();
 
-  console.log(result);
-
-  return result.rows[0];
+  return person;
 });
